@@ -1,0 +1,109 @@
+server:
+  port: 8000
+
+# changing of environment either development, testing, or production
+spring:
+  profiles:
+    active: development
+
+
+---
+# development environment
+spring:
+  config:
+    activate:
+      on-profile: development
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smartedconnect_devdb
+    username: postgres
+    password: Lucifer_001
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: debug
+    org.springframework: debug
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+
+---
+# testing environment
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smartedconnect_testdb
+    username: abiorh
+    password: Lucifer_001
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: debug
+    org.springframework: debug
+
+
+
+---
+
+---
+# production environment
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smartedconnectdb
+    username: abiorh
+    password: Lucifer_001
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: info
+    org.springframework: info
+
+---
+# don't log stacktrace for users
+server:
+  error:
+    include-stacktrace: never
+
+# pagination and set maximum page size to 100
+spring:
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+
+
+
+

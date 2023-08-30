@@ -1,0 +1,11 @@
+
+                              __ ___________    .____________                                     __
+  ______ _____ _____ ________/  |\_   _____/  __| _/\_   ___ \  ____   ____   ____   ____   _____/  |_
+ /  ___//     \\__  \\_  __ \   __\    __)_  / __ | /    \  \/ /  _ \ /    \ /    \_/ __ \_/ ___\   __\
+ \___ \|  Y Y  \/ __ \|  | \/|  | |        \/ /_/ | \     \___(  <_> )   |  \   |  \  ___/\  \___|  |
+/____  >__|_|  (____  /__|   |__|/_______  /\____ |  \______  /\____/|___|  /___|  /\___  >\___  >__|
+     \/      \/     \/                   \/      \/         \/            \/     \/     \/     \/
+Application Name: smartEdConnect powered by Malzahratech
+Application Version: Development
+Application Title: smartEdConnect
+Application Description: Educational Technology
