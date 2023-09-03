@@ -1,17 +1,16 @@
-package com.abiorh.smartEdConnect.student.model;
+package com.abiorh.smartEdConnect.teacher.model;
 
-import com.abiorh.smartEdConnect.student.studentListeners.StudentListener;
-import com.abiorh.smartEdConnect.teacher.model.Teacher;
+
+import com.abiorh.smartEdConnect.student.model.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,9 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EntityListeners(StudentListener.class)
-public class Student
-{
+public class Teacher {
+
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false)
@@ -37,13 +35,11 @@ public class Student
     @Column(name = "email_address", unique = true)
     private String email;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private StudentProfile studentProfile;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private ZonedDateTime createdAt;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private ZonedDateTime updatedAt;
-
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_student",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private Set<Student> students = new HashSet<>();
 }

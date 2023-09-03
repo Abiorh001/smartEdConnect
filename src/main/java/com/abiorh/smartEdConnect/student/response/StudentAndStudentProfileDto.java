@@ -1,5 +1,6 @@
 package com.abiorh.smartEdConnect.student.response;
 
+import com.abiorh.smartEdConnect.student.model.StudentProfile;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,18 +11,19 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentDto {
+@Builder
+public class StudentAndStudentProfileDto {
+
 
     private UUID id;
 
-    @NotBlank(message = "please enter your first name")
     private String firstName;
 
-    @NotBlank(message = "please enter your last name")
     private String lastName;
 
     private String email;
+
+    private StudentProfileDto studentProfileDto;
 }
