@@ -1,6 +1,6 @@
 package com.abiorh.smartEdConnect.student.repository;
 
-import com.abiorh.smartEdConnect.student.model.StudentProfile;
+import com.abiorh.smartEdConnect.student.entity.StudentProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

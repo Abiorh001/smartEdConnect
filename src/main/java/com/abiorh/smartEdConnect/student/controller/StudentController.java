@@ -1,11 +1,12 @@
 package com.abiorh.smartEdConnect.student.controller;
 
 
-import com.abiorh.smartEdConnect.student.customException.ResourceNotFoundException;
-import com.abiorh.smartEdConnect.student.customException.UniqueEmailException;
-import com.abiorh.smartEdConnect.student.model.Student;
-import com.abiorh.smartEdConnect.student.response.StudentDto;
-import com.abiorh.smartEdConnect.student.response.StudentFirstAndLastNameDto;
+import com.abiorh.smartEdConnect.globalConfig.customException.ErrorResponse;
+import com.abiorh.smartEdConnect.globalConfig.customException.ResourceNotFoundException;
+import com.abiorh.smartEdConnect.globalConfig.customException.UniqueEmailException;
+import com.abiorh.smartEdConnect.student.entity.Student;
+import com.abiorh.smartEdConnect.student.dto.StudentDto;
+import com.abiorh.smartEdConnect.student.dto.StudentFirstAndLastNameDto;
 import com.abiorh.smartEdConnect.student.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/v1/smartedconnect.io")
 @CrossOrigin(origins = {"*"})
 @Slf4j
 public class StudentController
@@ -33,133 +34,140 @@ public class StudentController
 
 
 
-    @PostMapping()
-    public ResponseEntity<StudentDto> saveNewStudent(@Valid @RequestBody StudentDto studentDto){
+    @PostMapping("/students")
+    public ResponseEntity<?> saveNewStudent(@Valid @RequestBody StudentDto studentDto){
 
         log.info("save new student to the database");
         try {
             StudentDto newStudentDto = studentService.saveNewStudent(studentDto);
-            return new ResponseEntity<>(newStudentDto, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newStudentDto);
         } catch (UniqueEmailException e){
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("BAD REQUEST", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
 
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<StudentDto> getStudentById(@PathVariable UUID id) {
+    @GetMapping("/students/{id}")
+    public ResponseEntity<?> getStudentById(@PathVariable UUID id) {
 
         try {
             StudentDto studentDto = studentService.getStudentById(id);
-            return new ResponseEntity<>(studentDto, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(studentDto);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<StudentDto>> getAllStudents() {
+    @GetMapping("/students")
+    public ResponseEntity<List<?>> getAllStudents() {
         List<StudentDto> studentDtoList = studentService.getAllStudents();
-        return new ResponseEntity<>(studentDtoList, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(studentDtoList);
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<StudentDto> updatePartOfStudentById(
+    @PatchMapping("/students/{id}")
+    public ResponseEntity<?> updatePartOfStudentById(
             @PathVariable("id") UUID id, @RequestBody StudentDto updatedStudent){
 
         try {
             StudentDto studentDto = studentService.updatePartOfStudentById(id, updatedStudent);
-            return new ResponseEntity<>(studentDto, HttpStatus.ACCEPTED);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentDto);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<StudentDto> updateStudentById(
+    @PutMapping("/students/{id}")
+    public ResponseEntity<?> updateStudentById(
             @PathVariable("id") UUID id, @RequestBody StudentDto updatedStudent){
 
         try {
             StudentDto studentDto = studentService.updateStudentById(id, updatedStudent);
             return new ResponseEntity<>(studentDto, HttpStatus.ACCEPTED);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudentById(@PathVariable("id") UUID id){
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<?> deleteStudentById(@PathVariable("id") UUID id){
 
         try {
             studentService.deleteStudentById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<StudentDto> findStudentByEmail(@PathVariable("email") String email){
+    @GetMapping("/students/email/{email}")
+    public ResponseEntity<?> findStudentByEmail(@PathVariable("email") String email){
 
         try {
            StudentDto studentDto = studentService.findStudentByEmail(email);
             return new ResponseEntity<>(studentDto, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
-    @GetMapping("/first_name/{firstName}")
-    public ResponseEntity<List<StudentDto>> findStudentsByFirstName(@PathVariable("firstName") String firstName){
+    @GetMapping("/students/first_name/{firstName}")
+    public ResponseEntity<List<?>> findStudentsByFirstName(@PathVariable("firstName") String firstName){
 
         List<StudentDto> studentDtoList = studentService.findStudentsByFirstName(firstName);
-        return new ResponseEntity<>(studentDtoList, HttpStatus.OK);
+        return  ResponseEntity.status(HttpStatus.OK).body(studentDtoList);
     }
 
-    @GetMapping("/containing_first_name/{name}")
-    public ResponseEntity<List<StudentDto>> findStudentsByFirstNameContaining(@PathVariable("name") String name){
+    @GetMapping("/students/containing_first_name/{name}")
+    public ResponseEntity<List<?>> findStudentsByFirstNameContaining(@PathVariable("name") String name){
 
         List<StudentDto> studentDtoList = studentService.findStudentsByFirstNameContaining(name);
-        return new ResponseEntity<>(studentDtoList, HttpStatus.OK);
+        return  ResponseEntity.status(HttpStatus.OK).body(studentDtoList);
     }
 
-    @GetMapping("/email_address/{email}")
-    public ResponseEntity<StudentFirstAndLastNameDto> getStudentByEmailAddress(@PathVariable("email") String email){
+    @GetMapping("/students/email_address/{email}")
+    public ResponseEntity<?> getStudentByEmailAddress(@PathVariable("email") String email){
 
         log.info("get a student first and last name using their email address");
         try {
           StudentFirstAndLastNameDto  studentFirstAndLastNameDto = studentService.getStudentByEmailAddress(email);
-          return new ResponseEntity<>(studentFirstAndLastNameDto, HttpStatus.OK);
+          return  ResponseEntity.status(HttpStatus.OK).body(studentFirstAndLastNameDto);
         } catch (ResourceNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("NOT FOUND", e.getMessage()));
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("server down!!! please try again later");
         }
     }
 
-    @GetMapping("/by_page_and_size")
-    public ResponseEntity<Page<StudentDto>> findALlStudentsByPageAndSize(
+    @GetMapping("/students/by_page_and_size")
+    public ResponseEntity<Page<?>> findALlStudentsByPageAndSize(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
 
         Page<StudentDto> studentDtoPage = studentService.findALlStudentsByPageAndSize(page, size);
-        return new ResponseEntity<>(studentDtoPage, HttpStatus.OK);
+        return  ResponseEntity.status(HttpStatus.OK).body(studentDtoPage);
     }
 
 

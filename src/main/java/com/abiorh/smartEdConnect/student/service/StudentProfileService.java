@@ -1,12 +1,13 @@
 package com.abiorh.smartEdConnect.student.service;
 
-import com.abiorh.smartEdConnect.student.customException.ResourceNotFoundException;
-import com.abiorh.smartEdConnect.student.model.Student;
-import com.abiorh.smartEdConnect.student.model.StudentProfile;
+import com.abiorh.smartEdConnect.globalConfig.customException.ResourceNotFoundException;
+import com.abiorh.smartEdConnect.globalConfig.customException.UnauthorizedAccessException;
+import com.abiorh.smartEdConnect.student.entity.Student;
+import com.abiorh.smartEdConnect.student.entity.StudentProfile;
 import com.abiorh.smartEdConnect.student.repository.StudentProfileRepository;
-import com.abiorh.smartEdConnect.student.response.StudentAndStudentProfileDto;
-import com.abiorh.smartEdConnect.student.response.StudentDto;
-import com.abiorh.smartEdConnect.student.response.StudentProfileDto;
+import com.abiorh.smartEdConnect.student.dto.StudentAndStudentProfileDto;
+import com.abiorh.smartEdConnect.student.dto.StudentDto;
+import com.abiorh.smartEdConnect.student.dto.StudentProfileDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,30 @@ public class StudentProfileService {
     }
 
 
+    public StudentAndStudentProfileDto getStudentWithStudentProfile
+            (UUID studentId, UUID id) throws ResourceNotFoundException, UnauthorizedAccessException {
 
+        StudentDto studentDto = studentService.getStudentById(studentId);
+        if(studentDto == null){
+            throw new ResourceNotFoundException("Student not found with id: " + studentId);
+        }
+        Student student = modelMapper.map(studentDto, Student.class);
+
+        Optional<StudentProfile> optionalStudentProfile= studentProfileRepository.findById(id);
+        if(optionalStudentProfile.isEmpty()){
+            throw new ResourceNotFoundException("Student profile not found with id: " + id);
+        }
+        StudentProfile studentProfile = optionalStudentProfile.get();
+        if(!student.getId().equals(studentProfile.getStudent().getId())){
+            throw new UnauthorizedAccessException("Unauthorized access to student profile.");
+        }
+        StudentProfileDto studentProfileDto = modelMapper.map(studentProfile, StudentProfileDto.class);
+        StudentAndStudentProfileDto studentAndStudentProfileDto = new StudentAndStudentProfileDto();
+        studentAndStudentProfileDto.setStudentDto(studentDto);
+        studentAndStudentProfileDto.setStudentProfileDto(studentProfileDto);
+        return studentAndStudentProfileDto;
+
+    }
 
 
 }

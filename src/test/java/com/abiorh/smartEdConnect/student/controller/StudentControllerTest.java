@@ -1,10 +1,10 @@
 package com.abiorh.smartEdConnect.student.controller;
 
-import com.abiorh.smartEdConnect.student.customException.ResourceNotFoundException;
-import com.abiorh.smartEdConnect.student.customException.UniqueEmailException;
-import com.abiorh.smartEdConnect.student.model.Student;
-import com.abiorh.smartEdConnect.student.response.StudentDto;
-import com.abiorh.smartEdConnect.student.response.StudentFirstAndLastNameDto;
+import com.abiorh.smartEdConnect.globalConfig.customException.ResourceNotFoundException;
+import com.abiorh.smartEdConnect.globalConfig.customException.UniqueEmailException;
+import com.abiorh.smartEdConnect.student.entity.Student;
+import com.abiorh.smartEdConnect.student.dto.StudentDto;
+import com.abiorh.smartEdConnect.student.dto.StudentFirstAndLastNameDto;
 import com.abiorh.smartEdConnect.student.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class StudentControllerTest {
         when(studentService.saveNewStudent(studentDto)).thenReturn(studentDto);
 
         // Act
-        ResponseEntity<StudentDto> response = studentController.saveNewStudent(studentDto);
+        ResponseEntity<?> response = studentController.saveNewStudent(studentDto);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -61,7 +61,7 @@ public class StudentControllerTest {
         }
 
         // Act
-        ResponseEntity<StudentDto> response = studentController.getStudentById(id);
+        ResponseEntity<?> response = studentController.getStudentById(id);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -75,7 +75,7 @@ public class StudentControllerTest {
         when(studentService.getAllStudents()).thenReturn(studentDtoList);
 
         // Act
-        ResponseEntity<List<StudentDto>> response = studentController.getAllStudents();
+        ResponseEntity<List<?>> response = studentController.getAllStudents();
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -95,7 +95,7 @@ public class StudentControllerTest {
         }
 
         // Act
-        ResponseEntity<StudentDto> response = studentController.updatePartOfStudentById(id, updatedStudent);
+        ResponseEntity<?> response = studentController.updatePartOfStudentById(id, updatedStudent);
 
         // Assert
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
@@ -115,7 +115,7 @@ public class StudentControllerTest {
         }
 
         // Act
-        ResponseEntity<StudentDto> response = studentController.updateStudentById(id, updatedStudent);
+        ResponseEntity<?> response = studentController.updateStudentById(id, updatedStudent);
 
         // Assert
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
@@ -128,7 +128,7 @@ public class StudentControllerTest {
         UUID id = UUID.randomUUID();
 
         // Act
-        ResponseEntity<Student> response = studentController.deleteStudentById(id);
+        ResponseEntity<?> response = studentController.deleteStudentById(id);
 
         // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -151,7 +151,7 @@ public class StudentControllerTest {
         }
 
         // Act
-        ResponseEntity<StudentDto> response = studentController.findStudentByEmail(email);
+        ResponseEntity<?> response = studentController.findStudentByEmail(email);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -166,7 +166,7 @@ public class StudentControllerTest {
         when(studentService.findStudentsByFirstName(firstName)).thenReturn(studentDtoList);
 
         // Act
-        ResponseEntity<List<StudentDto>> response = studentController.findStudentsByFirstName(firstName);
+        ResponseEntity<List<?>> response = studentController.findStudentsByFirstName(firstName);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -181,7 +181,7 @@ public class StudentControllerTest {
         when(studentService.findStudentsByFirstNameContaining(name)).thenReturn(studentDtoList);
 
         // Act
-        ResponseEntity<List<StudentDto>> response = studentController.findStudentsByFirstNameContaining(name);
+        ResponseEntity<List<?>> response = studentController.findStudentsByFirstNameContaining(name);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -200,7 +200,7 @@ public class StudentControllerTest {
         }
 
         // Act
-        ResponseEntity<StudentFirstAndLastNameDto> response = studentController.getStudentByEmailAddress(email);
+        ResponseEntity<?> response = studentController.getStudentByEmailAddress(email);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -216,7 +216,7 @@ public class StudentControllerTest {
         when(studentService.findALlStudentsByPageAndSize(page, size)).thenReturn(studentDtoPage);
 
         // Act
-        ResponseEntity<Page<StudentDto>> response = studentController.findALlStudentsByPageAndSize(page, size);
+        ResponseEntity<Page<?>> response = studentController.findALlStudentsByPageAndSize(page, size);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

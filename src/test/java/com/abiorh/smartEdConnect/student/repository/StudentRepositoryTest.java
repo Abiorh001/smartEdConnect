@@ -1,6 +1,6 @@
 package com.abiorh.smartEdConnect.student.repository;
 
-import com.abiorh.smartEdConnect.student.model.Student;
+import com.abiorh.smartEdConnect.student.entity.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

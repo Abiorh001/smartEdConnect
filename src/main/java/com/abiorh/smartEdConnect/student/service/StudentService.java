@@ -1,11 +1,11 @@
 package com.abiorh.smartEdConnect.student.service;
 
-import com.abiorh.smartEdConnect.student.customException.ResourceNotFoundException;
-import com.abiorh.smartEdConnect.student.customException.UniqueEmailException;
-import com.abiorh.smartEdConnect.student.model.Student;
+import com.abiorh.smartEdConnect.globalConfig.customException.ResourceNotFoundException;
+import com.abiorh.smartEdConnect.globalConfig.customException.UniqueEmailException;
+import com.abiorh.smartEdConnect.student.entity.Student;
 import com.abiorh.smartEdConnect.student.repository.StudentRepository;
-import com.abiorh.smartEdConnect.student.response.StudentDto;
-import com.abiorh.smartEdConnect.student.response.StudentFirstAndLastNameDto;
+import com.abiorh.smartEdConnect.student.dto.StudentDto;
+import com.abiorh.smartEdConnect.student.dto.StudentFirstAndLastNameDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

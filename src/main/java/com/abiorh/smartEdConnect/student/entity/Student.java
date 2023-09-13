@@ -1,16 +1,15 @@
-package com.abiorh.smartEdConnect.teacher.model;
+package com.abiorh.smartEdConnect.student.entity;
 
-
-import com.abiorh.smartEdConnect.student.entity.Student;
+import com.abiorh.smartEdConnect.student.Listener.StudentListener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,8 +17,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Teacher {
-
+@EntityListeners(StudentListener.class)
+public class Student
+{
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false)
@@ -34,11 +34,13 @@ public class Teacher {
     @Column(name = "email_address", unique = true)
     private String email;
 
-    @ManyToMany
-    @JoinTable(
-            name = "teacher_student",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private Set<Student> students = new HashSet<>();
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private StudentProfile studentProfile;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    private ZonedDateTime createdAt;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    private ZonedDateTime updatedAt;
+
 }
